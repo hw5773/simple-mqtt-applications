@@ -42,7 +42,8 @@ def on_message(hub, userdata, message):
     #    hub.disconnect()
     #    hub.loop_stop()
     
-def run(address, port, domain):
+def run(address, port, domain, name):
+    logging.debug("The IoT hub ({}) is running".format(name))
     connected = False
     data = UserData(domain)
     hub = paho.Client("hub", userdata=data)
@@ -63,6 +64,7 @@ def command_line_args():
     parser.add_argument("-a", "--address", metavar="<broker address>", help="broker address", type=str, required=True)
     parser.add_argument("-p", "--port", metavar="<broker port>", help="broker port", type=int, required=True)
     parser.add_argument("-d", "--domain", metavar="<name of domain>", help="name of domain", type=str, required=True)
+    parser.add_argument("-n", "--name", metavar="<name of IoT hub>", help="name of this IoT hub", type=str, default="iot_hub")
     parser.add_argument("-l", "--log", metavar="<log level (DEBUG/INFO/WARNING/ERROR/CRITICAL)>", help="Log level (DEBUG/INFO/WARNING/ERROR/CRITICAL)", type=str, default="INFO")
     args = parser.parse_args()
     return args
@@ -70,7 +72,7 @@ def command_line_args():
 def main():
     args = command_line_args()
     logging.basicConfig(level=args.log)
-    run(args.address, args.port, args.domain)
+    run(args.address, args.port, args.domain, args.name)
 
 if __name__ == "__main__":
     main()
